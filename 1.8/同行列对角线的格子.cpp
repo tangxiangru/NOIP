@@ -1,36 +1,40 @@
-
-#include "iostream"
+#include<iostream>
+#include<cstdio>
 using namespace std;
+int a[11][11],n,x,y;
+void dg(int i,int j)//在给定格子左下方的部分回溯输出
+{
+    if(i==n+1||j==0) return;
+    dg(i+1,j-1);
+    printf("(%d,%d) ",i,j);
+}
+void dg2(int i,int j)//给定格子右上方的递归直接输出
+{
+    if(i==0||j==n+1) return;
+    printf("(%d,%d) ",i,j);
+    dg2(i-1,j+1);
+}
 int main()
 {
-    int N,i,j;
-    cin>>N>>i>>j;
-    //行
-    for(int k=1;k<=N;k++)
+    cin>>n>>x>>y;
+    for(int i=1;i<=n;i++) 
+     printf("(%d,%d) ",x,i);
+    cout<<endl;
+    for(int i=1;i<=n;i++)
+     printf("(%d,%d) ",i,y);
+    cout<<endl;
+    int c=x-y;
+    if(c<=0)//x<y
     {
-        cout<<"("<<i<<","<<k<<")"<<" ";
+        for(int i=1;i-c<=n;i++)
+         printf("(%d,%d) ",i,i-c);
+    }
+    else if(c>0)//x>y
+    {
+        for(int i=1;i+c<=n;i++)
+         printf("(%d,%d) ",i+c,i);
     }
     cout<<endl;
-    //列
-    for(int k=1;k<=N;k++)
-    {
-        cout<<"("<<k<<","<<j<<")"<<" ";
-    }
-    cout<<endl;
-    //左上到右下
-    for(int k =-(N-1);k<=(N-1);k++)
-    {
-        if(i+k>=1&&i+k<=N&&j+k>=1&&j+k<=N) {
-            cout << "(" << i + k << "," << j+k << ")"<<" ";
-        }
-    }
-    cout<<endl;
-    //左下到右上
-    for(int k =-(N-1);k<=(N-1);k++)
-    {
-        if(i-k>=1&&i-k<=N&&j+k>=1&&j+k<=N) {
-            cout << "(" << i - k << "," << j+k << ")"<<" ";
-        }
-    }
-    return 0;
-
+    dg(x,y);
+    dg2(x-1,y+1);
+}

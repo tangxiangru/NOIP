@@ -1,21 +1,28 @@
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-using namespace std;
-bool check(double mid)
+#include<stdio.h>
+#include<math.h>
+double f(double x)
 {
-    double f = pow(mid,5)-15.0*pow(mid,4)+85.0*pow(mid,3)-225.0*pow(mid,2)+274.0*mid-121.0;
-    if(f > 0.0) return 1;
-    return 0;
+    double ans=0;
+    ans=pow(x,5)-15*pow(x,4)+85*pow(x,3)-225*pow(x,2)+274*x-121;
+    return ans;
 }
-int main()
+int main(int argc, char *argv[])
 {
-    double l=1.5, r=2.4, mid;
-    while(r-l > 0.00000001){
-        mid = (l+r)/2.0;
-        if (check(mid)) l = mid;
-        else r = mid;
+    double x,y,mid,fx,fy,fm;
+    x=1.5;
+    y=2.4;
+    mid=(x+y)/2;
+    fx=f(x);
+    fy=f(y);
+    fm=f(mid);
+    while( fabs(fm-0) > 1e-6)
+    {
+        if(fx*fm<0) { y=mid; fy=f(y); }
+        else { x=mid; fx=f(x); }
+        mid=(x+y)/2;
+        fm=f(mid);
     }
-    cout << fixed << setprecision(6) << mid << endl;
+    printf("%.6lf\n",mid);
     return 0;
 }
+
