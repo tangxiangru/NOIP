@@ -1,74 +1,100 @@
-#include <stack> 
-#include <iostream> 
-#include <iomanip>
-#include <math.h> 
-#include <vector> 
-#include <algorithm> 
-#include <sstream>
-#include <queue> 
-using namespace std; 
-void cal(string param, stack<double> &num); 
-void bolan(string &param, stack<double> &num) { // 遇到数字就入栈 
-    if (param != "+"&&param != "*"&&param != "-"&&param != "/"&&param!="^") {
-        num.push(atof(param.c_str())); 
-    } // 遇到操作符就计算，并将结果入栈 
-    else { cal(param, num); } 
-} 
-void cal(string param, stack<double> &num) { 
-    double num1 = num.top(); 
-    num.pop(); 
-    double num2 = num.top(); 
-    num.pop();
-    if (param == "+") { num.push(num2 + num1); } 
-    if (param == "-") { num.push(num2 - num1); }
-    if (param == "*") { num.push(num2 * num1); } 
-    if (param == "/") { num.push(num2 / num1); } 
-    if (param == "^") { num.push(pow(num2, num1)); } // cout<<"cal result:"<<num.top()<<endl; }
-
-int main() { 
-    int n;
-    cin>>n; // 初始化memory
-    priority_queue<double,vector<double>,greater<double>> p; 
-    vector<double> nums; 
-    for(int i=0;i<n;i++) { 
-        double inData; 
-        cin>>inData; 
-        p.push(inData); 
-    } 
-    getchar(); 
-    // 计算后缀表达式的值 
-
-    stack<double> bolan_num;
-    string command; 
-    while(getline(cin,command)) { 
-        int index1 = 0, index2 = command.length()-1; // 从右向左遍历表达式 获取操作符和数字 
-        for (int i = 0; i<=command.length(); i++) {
-            if (command[i] == ' ' || command[i] == '\0') {
-                index2 = i; 
-                string param = command.substr(index1, index2-index1); // cout << index1 << " " << index2 << " #" << param << endl; 
-                index1 = index2+1; 
-                if(param == "=") { // printf("%e\n", bolan_num.top()); // 用新计算出的值，替换掉memory中的最小值 
-                    cout<<fixed<<setprecision(6)<<scientific<<bolan_num.top()<<endl; 
-                    p.pop();
-                    p.push(bolan_num.top());
-                    bolan_num.pop();
-                    if(!bolan_num.empty()) { 
-                        cout<<"expect empty"<<endl; 
-                    }
-                }
-                else { 
-                    bolan(param, bolan_num);
-                }
-            } 
-        } 
-    } 
-    cout<<endl; // 输出memory中的值 
-    int count = 0;
-    for(int i=1;i<=n;i++) { 
-        count++; 
-        if(i==n) cout<<fixed<<setprecision(6)<<scientific<<p.top(); 
-        else if(count%10 == 0) cout<<fixed<<setprecision(6)<<scientific<<p.top()<<endl; 
-        else cout<<fixed<<setprecision(6)<<scientific<<p.top()<<" ";
-        p.pop(); 
-    } 
+//后缀表达式用栈来计算
+//内存用优先队列实现
+//用字符串和atof()来判断运算符
+#include<iostream>
+#include<queue>
+#include<string>
+#include<stack>
+#include<cmath>
+#include<iomanip>
+#include<algorithm>
+using namespace std;
+struct cmp{
+bool operator () (long double a,long double b)
+{
+return a>b;
+}
+};
+priority_queue<long double,deque<long double>,cmp> mem;
+stack<long double> st;
+int n;
+int main()
+{
+// freopen("input.txt","r",stdin);
+ios::sync_with_stdio(false);
+cin.tie(0);
+cin>>n;
+long double t;
+for(int i=0;i<n;i++)
+{
+cin>>t;
+mem.push(t);
+}
+string obj;
+while(cin>>obj)
+{
+if(obj=="=")
+{
+cout<<scientific<<setprecision(6)<<st.top()<<endl;
+mem.pop();
+mem.push(st.top());
+}
+else if(obj!="+" && obj!="-" && obj!="*" && obj!="/" && obj!="=" && obj!="^")
+{
+st.push(atof(obj.c_str()));
+}
+else if(obj=="+")
+{
+long double n1=st.top();
+st.pop();
+long double n2=st.top();
+st.pop();
+st.push(n2+n1);
+}
+else if(obj=="-")
+{
+long double n1=st.top();
+st.pop();
+long double n2=st.top();
+st.pop();
+st.push(n2-n1);
+}
+else if(obj=="*")
+{
+long double n1=st.top();
+st.pop();
+long double n2=st.top();
+st.pop();
+st.push(n2*n1);
+}
+else if(obj=="/")
+{
+long double n1=st.top();
+st.pop();
+long double n2=st.top();
+st.pop();
+st.push(n2/n1);
+}
+else if(obj=="^")
+{
+long double n1=st.top();
+st.pop();
+long double n2=st.top();
+st.pop();
+st.push(pow(n2,n1));
+}
+}
+cout<<endl;
+short sum=0;
+while(!mem.empty())
+{
+cout<<scientific<<setprecision(6)<<mem.top()<<' ';
+mem.pop();
+++sum;
+if(sum==10)
+{
+cout<<endl;
+sum=0;
+}
+}
 }
