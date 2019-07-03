@@ -1,0 +1,36 @@
+#include<stdlib.h>
+#include<stdio.h>
+int main()
+{
+int a,b,c,n,m;
+c=0;
+scanf("%d",&a);
+n=a;
+for(a=n/2;a<=n;a++)
+{
+c=0;
+for(b=1;b<=a;b++)
+{
+if(a%b==0)
+{
+c++;
+}
+}
+if(c==2)
+{
+for(b=1;b<=a;b++)
+{
+m=n-a;
+if(m%b==0)
+{
+c++;
+}
+}
+if(c==4)
+{
+printf("%d",a*m);
+break;
+}
+}
+}
+}
